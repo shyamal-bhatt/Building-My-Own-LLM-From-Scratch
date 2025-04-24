@@ -6,6 +6,7 @@
   - [**Working with text data** (Data Prep and Sampling)](#working-with-text-data-data-prep-and-sampling)
     - [**Word Embeddings**](#word-embeddings)
   - [**Tokenizing Text**](#tokenizing-text)
+    - [**Simple Tokenizer**](#simple-tokenizer)
 
 ---
 
@@ -61,7 +62,7 @@
 **Preparing the input text for training LLMs:**
 
 - Splitting text into individual word and subword.
-- Encoding into Vector Representations 
+- Encoding into Vector Representations
 
 **Advanced Tokenization schemes:**
 
@@ -93,4 +94,46 @@ While word embeddings are the most common form of text embedding, there are also
 
 ## **Tokenizing Text**
 
+Splitting each word and all characters and converting them into Token IDs.
 
+![Tokenizing Text](./Notes%20Images/Tokenizing.png)
+
+**Text Data Sources:**
+
+- [the-verdict.txt](<https://en.wikisource.org/wiki/The_Verdict>)
+
+### **Simple Tokenizer**
+
+**Step 1: Creating Tokens**
+
+```python
+
+>> re.findall(r"\w+|[^\w\s]+", "Hello, world. Is this-- a test?" )
+
+['Hello', ',', 'world', '.', 'Is', 'this', '--', 'a', 'test', '?']
+
+```
+
+
+**Step 2: Converting tokens into token IDs**
+
+To map the previously generated tokens into token IDs, we have to build a vocabulary first. This vocabulary defines how we map each unique word and special character to a unique integer.
+
+**Before Creating a Vocab, we need to remove duplicates and sort the token string.**
+
+```python
+>> text = '"chucked painting?" Wow!! --Yes... painting!!'
+
+Tokens
+>> tokens = [m.group(0) for m in re.finditer(r'\w+|([^\w\s])\1*', text)]
+
+['"', 'chucked', 'painting', '?', 'Wow', '!!', '--', 'Yes', '...', 'painting', '!!']
+
+Unique Tokens
+>> unique_tokens = set(tokens)
+{'!!', 'painting', 'chucked', 'Wow', '?', '--', '"', 'Yes', '...'}
+
+Sorted Tokens
+>> sorted(unique_tokens)
+['!!', '--', '...', '"', '?', 'Wow', 'Yes', 'chucked', 'painting']
+```
